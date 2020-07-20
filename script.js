@@ -5,10 +5,11 @@ const nextButton = document.getElementById('next-btn');
 
 const questionContainerElement = document.getElementById('question-container');
 let shuffleQuestions, currentQuestionIndex;
+let currentScore = 0;
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const scoreBar = document.getElementById('score');
-const currentScore = document.getElementById('current-score');
+let scoreDisplay = document.getElementById('current-score');
 
 
 startButton.addEventListener('click', startGame);
@@ -105,6 +106,7 @@ function startGame() {
     console.log('started');
     startButton.classList.add('hide');
     scoreBar.classList.remove('hide');
+    scoreDisplay.innerText = currentScore;
 
     shuffleQuestions = availableQ.sort(() => Math.random() - .5);
     currentQuestionIndex = 0;
@@ -124,7 +126,7 @@ function showQuestion(question) {
         button.innerText = answer.text
         button.classList.add('btn')
         if (answer.correct) {
-            button.dataset.correct = answer.correct
+            button.dataset.correct = answer.correct;
             //console.log(answer)
         }
         button.addEventListener('click', selectAnswer)
@@ -144,8 +146,11 @@ function selectAnswer(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
     setStatusClass(document.body, correct);
+
+
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
+        //addPoints(currentScore, button.dataset.correct )
     })
     if (shuffleQuestions.length > currentQuestionIndex + 1) {
         nextButton.classList.remove('hide')
@@ -155,10 +160,24 @@ function selectAnswer(e) {
     }
 }
 
+// function addPoints(n) {
+//         currentScore++;
+//         scoreDisplay.innerText = currentScore;
+//     } else          scoreDisplay.innerText = currentScore;
+//     // currentScore++;
+//     // scoreDisplay.innerText = currentScore;
+//     //debugger;
+// }
+
 function setStatusClass(element, correct) {
     clearStatusClass(element)
     if (correct) {
-        element.classList.add('correct')
+        element.classList.add('correct');
+        if(element.classList.contains('btn') && element.hasAttribute('data-correct')) {
+            // i tried to modify it this way that the function would be able to also check that, when applied to button specifically, the button hast correct attribute, nly then it would add a point, but it does it give pints also when false and i dont know why. I used .hasAttribute, used getAttribute and checked if true etc, i tried to do it though a separate function in add Points - still wrong...
+            currentScore++;
+            scoreDisplay.innerText = currentScore;
+        } else scoreDisplay.innerText = currentScore;
     } else {
         element.classList.add('wrong')
     }
