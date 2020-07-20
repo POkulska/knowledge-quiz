@@ -59,7 +59,7 @@ body.wrong {
     background-color: var(--hue-question-container-light);
     border-radius: 5px;
     padding: 10px;
-    box-shadow: 0 0 10px 2px var(--hue-neutral-dark);
+    box-shadow: 0 0 2px 1px var(--hue-question-container-light);
 }
 
 #score {
@@ -95,6 +95,7 @@ body.wrong > #score {
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
+    color: var(--hue-neutral-extra-dark);
     padding: 15px;
 }
 
