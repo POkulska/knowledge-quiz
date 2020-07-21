@@ -6,10 +6,12 @@ const nextButton = document.getElementById('next-btn');
 const questionContainerElement = document.getElementById('question-container');
 let shuffleQuestions, currentQuestionIndex;
 let currentScore = 0;
+
+//let countRightAnswers = 0;
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const scoreBar = document.getElementById('score');
-let scoreDisplay = document.getElementById('current-score');
+let scoreDisplay = document.getElementById('points');
 
 
 startButton.addEventListener('click', startGame);
@@ -100,13 +102,83 @@ let q6 = new Question(`If you dug a hole through the centre of the earth startin
     text: 'Poland',
     correct: false
 }])
-
+let q7 = new Question(`Which planet is the hottest in the solar system?`, [{
+    text: 'Neptune',
+    correct: false
+}, {
+    text: 'Mercury',
+    correct: false
+}, {
+    text: 'Mars',
+    correct: false
+}, {
+    text: 'Venus',
+    correct: true
+}])
+let q8 = new Question(`What is your body’s largest organ?`, [{
+    text: 'liver',
+    correct: false
+}, {
+    text: 'skin',
+    correct: true
+}, {
+    text: 'intestine',
+    correct: false
+}, {
+    text: 'heart',
+    correct: false
+}])
+let q9 = new Question(`How many hearts does an octopus have?`, [{
+    text: 'one',
+    correct: false
+}, {
+    text: 'two',
+    correct: false
+}, {
+    text: 'three',
+    correct: true
+}, {
+    text: 'five',
+    correct: false
+}])
+let q10 = new Question(`Which mammal has no vocal cords?`, [{
+    text: 'giraffe',
+    correct: true
+}, {
+    text: 'koala',
+    correct: false
+}, {
+    text: 'panda',
+    correct: false
+}])
+let q11 = new Question(`“Alcohol” is a word derived from which language?`, [{
+    text: 'Arabic',
+    correct: true
+}, {
+    text: 'Greek',
+    correct: false
+}, {
+    text: 'Latin',
+    correct: false
+}])
+let q12 = new Question(`“The Manhattan cocktail, a blend of sweet vermouth and whisky, was first created by the mother of which famous politician?`, [{
+    text: 'Tony Blair',
+    correct: false
+}, {
+    text: 'Elizabeth I',
+    correct: false
+}, {
+    text: 'Winston Churchill',
+    correct: true
+}])
 
 function startGame() {
-    console.log('started');
+    //console.log('started');
+    currentScore = 0;
+    scoreDisplay.innerText = currentScore;
+
     startButton.classList.add('hide');
     scoreBar.classList.remove('hide');
-    scoreDisplay.innerText = currentScore;
 
     shuffleQuestions = availableQ.sort(() => Math.random() - .5);
     currentQuestionIndex = 0;
@@ -150,34 +222,38 @@ function selectAnswer(e) {
 
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
-        //addPoints(currentScore, button.dataset.correct )
+        if (shuffleQuestions.length > currentQuestionIndex + 1) {
+            nextButton.classList.remove('hide')
+        } else {
+            startButton.innerText = 'Restart'
+            startButton.classList.remove('hide')
+        }
+        // document.getElementById('right-answers').innerHTML = countRightAnswers; // span will show the score
+        // if(selectedButton=correct)
     })
-    if (shuffleQuestions.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide')
-    } else {
-        startButton.innerText = 'Restart'
-        startButton.classList.remove('hide')
-    }
+    if (correct) {
+        addPoints()
+    } else scoreDisplay.innerText = currentScore;
+
 }
 
-// function addPoints(n) {
-//         currentScore++;
-//         scoreDisplay.innerText = currentScore;
-//     } else          scoreDisplay.innerText = currentScore;
-//     // currentScore++;
-//     // scoreDisplay.innerText = currentScore;
-//     //debugger;
-// }
+function addPoints() {
+    currentScore++;
+    scoreDisplay.innerText = currentScore;
+    //     } else          scoreDisplay.innerText = currentScore;
+    //     // currentScore++;
+    //     // scoreDisplay.innerText = currentScore;
+    //     //debugger;
+}
 
 function setStatusClass(element, correct) {
     clearStatusClass(element)
     if (correct) {
         element.classList.add('correct');
-        if(element.classList.contains('btn') && element.hasAttribute('data-correct')) {
-            // i tried to modify it this way that the function would be able to also check that, when applied to button specifically, the button hast correct attribute, nly then it would add a point, but it does it give pints also when false and i dont know why. I used .hasAttribute, used getAttribute and checked if true etc, i tried to do it though a separate function in add Points - still wrong...
-            currentScore++;
-            scoreDisplay.innerText = currentScore;
-        } else scoreDisplay.innerText = currentScore;
+        // if (element.classList.contains('btn')) {
+        //     currentScore++;
+        //     scoreDisplay.innerText = currentScore;
+        // } else scoreDisplay.innerText = currentScore;
     } else {
         element.classList.add('wrong')
     }
